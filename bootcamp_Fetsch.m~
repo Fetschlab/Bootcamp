@@ -331,10 +331,10 @@ changeAxesFontSize(gca,15,15);
 % and used to generate hypotheses about the neural basis of signal, noise,
 % and criterion. 
 
-% So although it still seems rather abstract, SDT was among the first
-% generative/process models for perception that could be  translated into a
-% so-called 'linking hypothesis'; this was arguably the genesis of
-% (sensory) systems neuroscience
+% So although it seems still rather abstracted away from real neurons,
+% SDT was among the first generative/process models for perception that
+% could be  translated into a so-called 'linking hypothesis';
+% this was arguably the genesis of (sensory) systems neuroscience
 
 % (BACK TO SLIDES)
 
@@ -441,12 +441,8 @@ data = simDDM_simple_forBootcamp(ntrials,k,sigma,B,Tnd);
 % Luckily smart folks have derived closed-form expressions for pRight (it
 % happens to be a logistic function of drift rate times bound!), and
 % RT (not intuitively obvious), at least for simple DDMs.
+% See Shadlen et al. 2006 if you want the nitty gritty.
 
-% These are: 
-% pRight = 1 / (1 + exp(-2*k*C*B)) % (look familiar?)
-% meanRT = B/k*C * tanh(k*C*B)
-
-% See Shadlen et al. 2006 for the derivations.
 
 guess = [k B Tnd]; % assumes sigma=1
 [fit,~] = Dots_fitDDM_1D_noConf(guess,data.scoh,data.choice,round(data.RT*1000)); % convert RT back to ms, for legacy reasons
@@ -456,11 +452,6 @@ subplot(2,1,1); title('simulated data with DDM fit');
 [k fit(1) ; B fit(2) ; Tnd fit(3)]
 
 % nice!
-
-% (NOTE the cool thing is that the above equations, used in the fitting
-% routine, appear nowhere in the simulation code. All the simulation does
-% is generate Gaussian random numbers and sum them up. The analytical
-% solutions then are able to fit and recover the generative parameters.)
 
 
 %% now that we've proven we can recover generative params, let's fit the real data
