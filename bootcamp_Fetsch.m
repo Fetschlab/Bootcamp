@@ -173,7 +173,7 @@ Beta
 % give the model-based probability of rightward given the params:
 
 figure; set(gcf,'Color',[1 1 1],'Position',[300 500 1000 450]);
-suptitle('logistic fit')
+title('logistic fit')
 yVals = glmval(Beta,cohs,'logit');
 subplot(1,2,1); plot(cohs,pRight,'ko');
 hold on; plot(cohs,yVals,'r*');
@@ -367,7 +367,7 @@ for c = 1:length(cohs) % loop over signed coherence
 end
 
 figure; set(gcf,'Color',[1 1 1],'Position',[300 500 450 600]);
-suptitle('data: choice + RT');
+title('data: choice + RT');
 
 subplot(2,1,1); plot(cohs,pRight,'bo-');
 xlabel('Motion strength (%coh)'); ylabel('Proportion rightward choices');
