@@ -2,6 +2,10 @@
 % CRF : Hopkins-Janelia Bootcamp 2023
 
 
+% code can be found here: https://github.com/Fetschlab/Bootcamp
+% can download as .zip and put in any local folder.
+
+% then change this to your folder, or comment it out:
 cd /Users/chris/Documents/Teaching/Bootcamp
 
 
@@ -124,15 +128,17 @@ for t = 1:length(data.choice) % loop over trials
         Lik(t) = 1-pR_model(t);
     end
 end
-% (offline coding exercise: do this without a FOR loop)
+% (offline coding exercise: rewrite this without using a FOR loop)
 
 
 
-%%
-% a snapshot of what we've done:
+% A snapshot of what we've done:
 ['    scoh       choice      pR_model     Likelihood']
 [data.scoh(1:10) data.choice(1:10) pR_model(1:10) Lik(1:10)]
-% (in partuclar compare rows 3+4 vs. 5)
+% In partuclar compare rows 3+4 vs. 5: in 5 the coh was positive (right)
+% but monkey chose left, an error that was not well predicted by the
+% model (expected pRight for that trial was high). Thus, the likelihood is
+% low, 1-Pr.
 
 
 % The full likelihood for the  dataset would be the product of all the
@@ -152,7 +158,7 @@ end
 % that can be used for much more complicated models than just the
 % 2-parameter logistic so it is worth knowing. It's called glmfit.
 
-X = data.scoh; 
+X = data.scoh;
 y = data.choice;
     % NOTE that we are not fitting the proportions, we are fitting
     % individual trials! This is more powerful and accurate.
@@ -167,7 +173,7 @@ Beta
 % intuitive, because remember it's logit(P) = slope*x + bias
 % but it's still true that the higher the number the steeper the slope
 
-%%
+%% 1.4.1
 
 % to plot our best fitting model vs. the data points, can use glmval to
 % give the model-based probability of rightward given the params:
@@ -234,6 +240,7 @@ ylabel('Proportion rightward choices');
 changeAxesFontSize(gca,15,15);
 
 
+%% 1.5.1
 
 % now simulate unbiased choices but with lower slope (less sensitivity)
 Beta2 = [0 8]';
@@ -267,12 +274,12 @@ changeAxesFontSize(gca,15,15);
 
 
 
-%% signal-detection theory (SDT)
+%%  2.1 - signal-detection theory (SDT)
 
 clear scoh
 ntrials = 50000;
 
-% Our logistic model is nice but merely descriptive. It describes average
+% A logistic model is nice but merely descriptive. It describes average
 % behavior over ensembles of trials (a given set of independent variables),
 % but we want to know how the brain makes a decision on a single trial.
 % For this we need a mechanistic or 'process' model.
@@ -342,7 +349,7 @@ changeAxesFontSize(gca,15,15);
 
 
 
-%% what if we want to explain more than just the choice?
+%%  2.2 - what if we want to explain more than just the choice?
 
 % Often we measure some other aspect of behavior and ask whether it arises 
 % from the same process in the brain. If so, our process model should be
@@ -377,7 +384,7 @@ subplot(2,1,2); plot(cohs,meanRT(:,1),'ro-');
 xlabel('Motion strength (%coh)'); ylabel('Reaction time (ms)');
 changeAxesFontSize(gca,15,15);
 
-%% what kind of process can explain choice + RT?
+%%  2.2.1 - what kind of process can explain choice + RT?
 
 % SDT has no explicit time dimension and thus cannot explain RT
 
@@ -396,7 +403,6 @@ Tnd = 300; % non-decision time: sensory and motor delays distinct from the decis
 % this is sometimes a 4th free parameter but for simplicty we fix it to 1
 sigma = 1; % standard deviation of momentary evidence
 
-
 ntrials = 50000;
 
 data = simDDM_simple_forBootcamp(ntrials,k,sigma,B,Tnd);
@@ -404,7 +410,7 @@ data = simDDM_simple_forBootcamp(ntrials,k,sigma,B,Tnd);
 
 
 
-%% an important step in any modeling effort: PARAMETER RECOVERY
+%%  2.3 - a critical step in almost any modeling effort: PARAMETER RECOVERY
 
 % Of course we want to do more than just simulate data that look reasonable.
 % We want to actually *fit* our process model to the data.  Why?
@@ -420,12 +426,12 @@ data = simDDM_simple_forBootcamp(ntrials,k,sigma,B,Tnd);
 % aka the generative parameters), then FIT the fake data to try and recover
 % those params.
 
+
 % (for more see e.g. Wilson & Collins 2019,
 % Ten simple rules for the computational modeling of behavioral data
 % https://github.com/AnneCollins/TenSimpleRulesModeling/ )
 
 
-%%
 % As with the logistic, we need an expression for the likelihood: the
 % probability of observing the data given a set of model params.
 
@@ -455,15 +461,24 @@ subplot(2,1,1); title('simulated data with DDM fit');
 % compare generative and fitted params:
 [k fit(1) ; B fit(2) ; Tnd fit(3)]
 
-% nice!
+% Nice!
 
 % (NOTE the cool thing is that the above equations, used in the fitting
 % routine, appear nowhere in the simulation code. All the simulation does
-% is generate Gaussian random numbers and sum them up. The analytical
-% solutions then are able to fit and recover the generative parameters.)
+% is generate Gaussian random numbers and sum them up. The fitting code 
+% uses the analytical solutions for the mean RT and pRight, and so the fact
+% that they can recover the generative parameters is a kind of proof that 
+% the equations are correct.)
+
+% Now it won't always be the case that there is a closed-form solution for
+% the distributions or even expected values of variables in a given model.
+% If that's the case, there are other methods for estimating likelihoods,
+% most of which involve something akin to simulation (aka 'Monte-Carlo'
+% methods, MCMC, BADS, etc). These are out of our current scope but will
+% send some refs.
 
 
-%% now that we've proven we can recover generative params, let's fit the real data
+%%  2.4 - now that we've proven we can recover generative params, let's fit the real data
 
 clear; close all
 load dots_data
@@ -472,6 +487,7 @@ load dots_data
 guess = [1 10 500]; % ...but turns out these don't have to be very close at all
 [fit,~] = Dots_fitDDM_1D_noConf(guess,data.scoh,data.choice,round(data.RT*1000));
 subplot(2,1,1); title('real data with DDM fit');
+
 k = fit(1)
 B = fit(2)
 Tnd = fit(3)
@@ -485,12 +501,12 @@ Tnd = fit(3)
 
 
 
-%% (if time) another kind of behavioral modeling: RL and bandit-type tasks
+%%  3.1 (if time) - another kind of behavioral modeling: RL and bandit-type tasks
 
 clear
 
-% Pull up Wilson & Collins 2019, but explaining Rescorla-Wagner etc
-% will have to be elsewhere, or on your own.
+% Again see Wilson & Collins 2019, and/or search on your own for 
+% Rescorla-Wagner and bandit problems.
 
 T = 100; % num trials
 mu = [0.2 0.8]; % reward probabilities
@@ -513,7 +529,7 @@ title('learning curve');
 
 
 
-%% now try non-stationary bandit
+%%  3.1.1 - now try non-stationary bandit
 
 T = 1000; % num trials
 mu = [0.3 0.7]; % reward probabilities
@@ -542,7 +558,7 @@ ylabel('Choices (smoothed)')
   
 
 
-%% more cool new stuff to play with on your own:
+%% more cool stuff to play with on your own:
 
 % https://pubmed.ncbi.nlm.nih.gov/33412101/
 % https://github.com/nicholas-roy/PsyTrack
