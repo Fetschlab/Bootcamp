@@ -88,12 +88,15 @@ end
 
 figure; set(gcf,'Color',[1 1 1],'Position',[300 500 450 600],'PaperPositionMode','auto');
 
-subplot(2,1,1); plot(cohs,pRight(:,1),'bo-'); 
+% plot without connecting lines, for time being
+subplot(2,1,1); plot(cohs,pRight(:,1),'bo'); 
 xlabel('Motion strength (%coh)'); ylabel('Proportion rightward choices');
 title('simulated data: DDM');
+changeAxesFontSize(gca,13,13);
 
-subplot(2,1,2); plot(cohs,meanRT(:,1),'ro-');
+subplot(2,1,2); plot(cohs,meanRT(:,1),'ro');
 xlabel('Motion strength (%coh)'); ylabel('Reaction time (ms)');
+changeAxesFontSize(gca,13,13);
 
 
 %% format struct as in real data files
