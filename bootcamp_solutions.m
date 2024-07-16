@@ -32,11 +32,11 @@ n = nan(length(cohs),1);
 for c = 1:length(cohs)
     I = data.scoh==cohs(c); % find trials with w this particular coh
     n(c) = sum(I); % how many?
-% % %     pRight(c) = ??? % proportion of those trials where the choice was "right"  % *** exercise 1 ***
+    pRight(c) = sum(I & data.choice==1) / n(c); % proportion of those trials where the choice was "right"
 end
 
 % % normally we'd want error bars, so here's the formula for standard error
-% % of a proportion:
+% % of a proportion (derivation left as an exercise for the reader):
 % pRightSE = sqrt( (pRight.*(1-pRight)) ./ n );
 % % but it's so tiny with this many trials, we can ignore it for now
 
@@ -118,7 +118,7 @@ beta1 = 8; % a guess, based on previous experience
 % can evaluate the function at any x value (i.e., interpolated or
 % extrapolated) not just the values present in the dataset
 cohsInterp = -0.51:0.01:0.51;
-% % % B = ???  % *** exercise 2 ***
+B = beta_0 + beta1*cohsInterp;
 pR = logistic(B);
 
 figure(1);
@@ -140,7 +140,7 @@ for t = 1:length(data.choice) % loop over trials
         Lik(t) = 1-pR_model(t);
     end
 end
-% (optional offline coding exercise: rewrite this without using a FOR loop)
+% (offline coding exercise: rewrite this without using a FOR loop)
 
 
 % A snapshot of what we've done:
@@ -186,7 +186,7 @@ Beta
 % intuitive, because remember it's logit(P) = slope*x + bias
 % but it's still true that the higher the number the steeper the slope
 
-%% 1.3.1
+%% 1.3.1  plot the fit
 
 % to plot our best fitting model vs. the data points, can use glmval to
 % give the model-based probability of rightward given the params:
@@ -197,7 +197,7 @@ legend([h1 h2 h3],'data','guess','fit','Location','Northwest');
 % pretty good!
 
 
-%% 2.1 - mechanistic/process models: signal-detection theory (SDT)
+%% 2.1 - mechanistic/process models: signal detection theory (SDT)
 
 clear scoh
 close all
@@ -256,11 +256,11 @@ for t = 1:ntrials
     % Because coherence is signed, w positive values indicating rightward,
     % the optimal (unbiased) criterion is simply zero: if greater than
     % zero, choose Right (1), else choose Left (0)
-
-    % ???
-    % ??? % *** exercise 3 *** write a loop to compare obs to criterion
-    % ???
-
+    if obs(t)>0
+        choice(t)=1;
+    else
+        choice(t)=0;
+    end
 end
 pRight = nan(length(cohs),1);
 n = nan(length(cohs),1);
@@ -313,7 +313,7 @@ for c = 1:length(cohs) % loop over signed coherence
     % % again we should always consider (and plot) error/dispersion in data
     % % (standard errors or confidence intervals), which for RT would be:
     % RTse(c) = std(data.RT(I))/sqrt(n(c)); ...
-    % % but we'll ignore it for this class
+    % % but we'll ignore it for this exercise
 end
 
 figure(5); set(gcf,'Color',[1 1 1],'Position',[300 500 450 600]);
@@ -407,9 +407,9 @@ guess = [k*(1+randn) B*(1+randn) Tnd*(1+randn)]
 subplot(2,1,1); title('simulated data with DDM fit');
 
 % compare generative and fitted params:
-% ???  % *** exercise 4 ***
+[k fit(1) ; B fit(2) ; Tnd fit(3)]
 
-
+% Nice!
 
 % (If your fits fail, just try again! Could be the randomization caused the
 % guess to be too far off for the model to converge)
@@ -427,6 +427,7 @@ subplot(2,1,1); title('simulated data with DDM fit');
 % most of which involve something akin to simulation (aka 'Monte-Carlo'
 % methods, MCMC, BADS, etc). These are beyond our current scope but ask
 % me about them if interested.
+
 
 %%  2.4 - fit the DDM
 
@@ -463,7 +464,7 @@ clear
 
 T = 100; % num trials
 mu = [0.2 0.8]; % reward probabilities
-alpha = 0.05; % learning rate  *** exercise 5 *** test out different values 
+alpha = 0.05; % learning rate
 beta = 5; % inverse temperature
 
 [choice, ~] = simulate_M3RescorlaWagner_v1(T, mu, alpha, beta);

@@ -73,15 +73,13 @@ figure(1001); set(gcf,'Color',[1 1 1],'Position',[600 500 450 700],'PaperPositio
 subplot(2,1,1);
 errorbar(us,pRight,pRight_se,'bo'); hold on;
 plot(g_stimval,meanPr_model,'b-');
-% xlabel('Motion strength (%coh)');
-xlabel('Heading angle (deg)');
+xlabel('Motion strength (%coh)');
 ylabel('Proportion rightward choices');
 
 subplot(2,1,2);
 errorbar(us,RTmean,RTse,'ro'); hold on;
 plot(g_stimval,meanRT_model,'r-');
-% xlabel('Motion strength (%coh)');
-xlabel('Heading angle (deg)');
+xlabel('Motion strength (%coh)');
 ylabel('Reaction time (ms)');
 
 
