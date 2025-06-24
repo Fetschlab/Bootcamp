@@ -5,7 +5,7 @@
 % can download as .zip and put in any local folder.
 
 % then change this to your folder, or comment it out:
-cd /Users/chris/Documents/Teaching/Bootcamp
+% cd /Users/chris/Documents/Teaching/Bootcamp
 
 
 
@@ -336,16 +336,17 @@ changeAxesFontSize(gca,15,15);
 % e.g. the drift-diffusion model (DDM)
 
 % First, let's simulate it.
+close all
 
 % The model has at least two, and usually three parameters 
 % (play around with these to see their effects)
-k = 0.3; % 'drift rate' or sensitivity term: a constant converting stimulus strength into units of 'momentary' evidence
-B = 25; % height of the bound, or threshold, for decision termination
-Tnd = 300; % non-decision time: sensory and motor delays distinct from the decision process
+k = 0.2; % 0.3; % 'drift rate' or sensitivity term: a constant converting stimulus strength into units of 'momentary' evidence
+B = 30; % 25; % height of the bound, or threshold, for decision termination
+Tnd = 100; % non-decision time: sensory and motor delays distinct from the decision process
 % ^ or this can be expressed as a distribution, ie assumed o vary across trials (more natural but adds free param(s))
 % and:
 % this is sometimes a 4th free parameter but for simplicty we fix it to 1
-sigma = 1; % standard deviation of momentary evidence
+sigma = 0.8; % standard deviation of momentary evidence
 
 ntrials = 50000;
 

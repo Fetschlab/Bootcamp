@@ -8,12 +8,13 @@ function data = simDDM_simple_forBootcamp(ntrials, k, sigma, B, Tnd)
 % different levels of motion strength ('coherence')
 % we use +/- eps instead of zero so that there is a direction (and hence a
 % correct answer) associated with zero coh
-cohs = [-0.512 -0.256 -0.128 -0.064 -0.032 -eps eps 0.032 0.064 0.128 0.256 0.512];
+% cohs = [-0.512 -0.256 -0.128 -0.064 -0.032 -eps eps 0.032 0.064 0.128 0.256 0.512];
+cohs = [-0.115 -0.09 -0.06 -0.035 -0.015 0.015 0.035 0.06 .09 0.115];
 
 % delta-T (time step, in ms)
 dT = 1;
 % max duration of stimulus
-maxdur = 2000;
+maxdur = 3000;
 timeAxis = 0:dT:maxdur;
 
 % randomize coherence and duration for all trials (n draws with replacement)
@@ -114,4 +115,20 @@ data.scoh = coh;
 data.choice = choice;
 data.choice(data.choice==-1) = 0; 
 data.RT = RT/1000; % convert to seconds
+
+
+%% TEMP make fig like Balsdon paper (Pcorr vs median RT)
+uscohs = unique(data.coherence);
+for sc = 1:length(uscohs)
+    I = data.coherence==uscohs(sc);
+    meanRT2(sc) = mean(RT(I));
+    pCorr(sc) = sum(I & choice==sign(coh)) / sum(I);
+    medianRT(sc) = median(RT(I));
+end
+
+% figure; plot(medianRT(2:end),pCorr(2:end),'bo-');
+figure; plot(medianRT,pCorr,'bo-');
+xlabel('Median response time (ms)');
+ylabel('Proportion correct');
+
 

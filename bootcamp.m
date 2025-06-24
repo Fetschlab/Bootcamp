@@ -32,8 +32,11 @@ n = nan(length(cohs),1);
 for c = 1:length(cohs)
     I = data.scoh==cohs(c); % find trials with w this particular coh
     n(c) = sum(I); % how many?
-% % %     pRight(c) = ??? % proportion of those trials where the choice was "right"  % *** exercise 1 ***
+%**************************************************************************************************** 
+%     pRight(c) = ??? % proportion of those trials where the choice was "right"  % *** exercise 1 ***
+%****************************************************************************************************
 end
+
 
 % % normally we'd want error bars, so here's the formula for standard error
 % % of a proportion:
@@ -118,7 +121,11 @@ beta1 = 8; % a guess, based on previous experience
 % can evaluate the function at any x value (i.e., interpolated or
 % extrapolated) not just the values present in the dataset
 cohsInterp = -0.51:0.01:0.51;
-% % % B = ???  % *** exercise 2 ***
+
+%*********************************
+% B = ???  % *** exercise 2 ***
+%*********************************
+
 pR = logistic(B);
 
 figure(1);
@@ -257,9 +264,10 @@ for t = 1:ntrials
     % the optimal (unbiased) criterion is simply zero: if greater than
     % zero, choose Right (1), else choose Left (0)
 
-    % ???
-    % ??? % *** exercise 3 *** write a loop to compare obs to criterion
-    % ???
+    %**************************************************************
+    % *** exercise 3 *** write a loop to compare obs to criterion
+    %**************************************************************
+
 
 end
 pRight = nan(length(cohs),1);
@@ -406,8 +414,12 @@ guess = [k*(1+randn) B*(1+randn) Tnd*(1+randn)]
 [fit,~] = Dots_fitDDM_1D_noConf(guess,data.scoh,data.choice,round(data.RT*1000)); % convert RT back to ms, for legacy reasons
 subplot(2,1,1); title('simulated data with DDM fit');
 
+%*****************************************
+% *** exercise 4 ***
 % compare generative and fitted params:
-% ???  % *** exercise 4 ***
+% 
+%
+%*****************************************
 
 
 
@@ -463,8 +475,12 @@ clear
 
 T = 100; % num trials
 mu = [0.2 0.8]; % reward probabilities
-alpha = 0.05; % learning rate  *** exercise 5 *** test out different values 
-beta = 5; % inverse temperature
+
+%********************************************************************************
+alpha = 0.05; % learning rate parameter   *** exercise 5 *** test out different values 
+%********************************************************************************
+
+beta = 5; % inverse temperature parameter
 
 [choice, ~] = simulate_M3RescorlaWagner_v1(T, mu, alpha, beta);
 choice = choice-1; % convert [1:2] to [0:1] for consistency w above
